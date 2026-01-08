@@ -17,5 +17,14 @@ export const mockGoals: Mock[] = [
         freqType: 'week',
         targetCompleted: 5,
         targetTotal: 15,
+    },
+        {
+        icon: '📚',
+        id: '2',
+        description: 'Create a React App',
+        freqUnit: 3,
+        freqType: 'week',
+        targetCompleted: 5,
+        targetTotal: 15,
     }
 ];
