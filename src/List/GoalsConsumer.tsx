@@ -15,7 +15,7 @@ const GoalsConsumer = () => {
               key={goal.id}
               className="border rounded-xl p-4 m-4 shadow-md flex flex-row gap-4 items-center"
             >
-              <div className="border rounded-4xl p-4 text-xl">{goal.icon}</div>
+              <div className="border rounded-4xl p-4 text-3xl">{goal.icon}</div>
               <div className="text-xl font-bold gap-4 flex-1">
                 {goal.freqUnit}/{goal.freqType} {goal.description}
               </div>
