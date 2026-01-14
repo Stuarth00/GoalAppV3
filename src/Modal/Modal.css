@@ -1,6 +1,6 @@
 dialog {
     margin: auto;
-    padding: 3rem; 
+    position: fixed;
     border: none; 
     border-radius: 12px;
     box-shadow: 2xl;

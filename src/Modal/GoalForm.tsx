@@ -36,7 +36,7 @@ function GoalForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-[48px]">
       <div>
         <h1>Add a new goal</h1>
         <label htmlFor="description">Description of your goal:</label>
