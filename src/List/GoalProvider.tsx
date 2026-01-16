@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { Mock, mockGoals } from '../List/Mock';
+import { Mock, mockGoals } from './Mock';
+import { GoalFormData } from '../Modal/GoalForm';
 
 interface GoalsContextType {
   goals: Mock[];
   isLoading: boolean;
-  addGoal: (goal: string) => void;
+  handleAddGoal: (goal: GoalFormData) => void;
 }
 
 export const GoalsContext = createContext<GoalsContextType>({} as GoalsContextType);
@@ -23,20 +24,18 @@ export const GoalsProvider = ({ children }: { children: ReactNode }) => {
     }, 2000);
   }, []);
 
-  const addGoal = (goal: string) => {
+  const handleAddGoal = (newGoalData: GoalFormData) => {
     const newGoal: Mock = {
       id: Date.now().toString(),
-      icon: '🎯',
-      description: goal,
-      freqUnit: 1,
-      freqType: 'week',
-      targetCompleted: 0,
-      targetTotal: 10,
+      ...newGoalData,
     };
-    setGoals([...goals, newGoal]);
+    setGoals((prevGoals) => [...prevGoals, newGoal]);
+    console.log('New Goal Added:', newGoal);
   };
 
   return (
-    <GoalsContext.Provider value={{ goals, isLoading, addGoal }}>{children}</GoalsContext.Provider>
+    <GoalsContext.Provider value={{ goals, isLoading, handleAddGoal }}>
+      {children}
+    </GoalsContext.Provider>
   );
 };

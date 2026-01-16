@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { GoalsContext } from './Goals';
+import { GoalsContext } from './GoalProvider';
 
-const GoalsConsumer = () => {
+const GoalsConsumer = ({ data }: { data: any }) => {
   const contextValue = useContext(GoalsContext);
 
   return (
