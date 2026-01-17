@@ -4,25 +4,34 @@ import { GoalFormData } from '../Modal/GoalForm';
 
 interface GoalsContextType {
   goals: Mock[];
-  isLoading: boolean;
   handleAddGoal: (goal: GoalFormData) => void;
 }
 
 export const GoalsContext = createContext<GoalsContextType>({} as GoalsContextType);
 
 export const GoalsProvider = ({ children }: { children: ReactNode }) => {
-  const [goals, setGoals] = useState<Mock[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  //Saving goals to localStorage
+  const [goals, setGoals] = useState<Mock[]>(() => {
+    const savedGoals = localStorage.getItem('goals');
+    if (savedGoals) {
+      return JSON.parse(savedGoals);
+    }
+    return [
+      {
+        icon: '🏃‍♂️',
+        id: '1',
+        description: 'Run 15km',
+        freqUnit: 3,
+        freqType: 'week',
+        targetCompleted: 5,
+        targetTotal: 15,
+      },
+    ];
+  });
 
   useEffect(() => {
-    console.log('Fetching goals...');
-
-    setTimeout(() => {
-      setGoals(mockGoals);
-      setIsLoading(false);
-      console.log('Goals fetched:', mockGoals);
-    }, 2000);
-  }, []);
+    localStorage.setItem('goals', JSON.stringify(goals));
+  }, [goals]);
 
   const handleAddGoal = (newGoalData: GoalFormData) => {
     const newGoal: Mock = {
@@ -33,9 +42,5 @@ export const GoalsProvider = ({ children }: { children: ReactNode }) => {
     console.log('New Goal Added:', newGoal);
   };
 
-  return (
-    <GoalsContext.Provider value={{ goals, isLoading, handleAddGoal }}>
-      {children}
-    </GoalsContext.Provider>
-  );
+  return <GoalsContext.Provider value={{ goals, handleAddGoal }}>{children}</GoalsContext.Provider>;
 };

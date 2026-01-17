@@ -12,24 +12,24 @@ interface GoalFormData {
   targetTotal: number;
 }
 
-function GoalForm({
-  onClose,
-  // onAddGoal,
-}: {
-  onClose: () => void;
-  // onAddGoal: (newGoalData: GoalFormData) => void;
-}) {
+const INITIAL_FORM: GoalFormData = {
+  icon: '',
+  description: '',
+  freqUnit: 0,
+  freqType: '',
+  targetCompleted: 0,
+  targetTotal: 0,
+};
+
+function GoalForm({ onClose }: { onClose: () => void }) {
   const { handleAddGoal } = useContext(GoalsContext);
 
-  const [formData, setFormData] = useState<GoalFormData>({
-    icon: '',
-    // id: '',
-    description: '',
-    freqUnit: 0,
-    freqType: '',
-    targetCompleted: 0,
-    targetTotal: 0,
-  });
+  const [formData, setFormData] = useState<GoalFormData>(INITIAL_FORM);
+
+  const handleCloseForm = () => {
+    onClose();
+    setFormData(INITIAL_FORM);
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -41,19 +41,9 @@ function GoalForm({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
     onClose();
     handleAddGoal(formData);
-    setFormData({
-      icon: '',
-      // id: '',
-      description: '',
-      freqUnit: 0,
-      freqType: '',
-      targetCompleted: 0,
-      targetTotal: 0,
-    });
+    setFormData(INITIAL_FORM);
   };
 
   return (
@@ -112,10 +102,10 @@ function GoalForm({
           className="bg-lime-950 p-2 rounded-md"
         />
 
-        <label htmlFor="target-completed">How many times you want to complete this goal</label>
+        <label htmlFor="target-total">How many times you want to complete this goal</label>
         <input
           type="number"
-          id="target"
+          id="targetTotal"
           placeholder="e.g. 50"
           name="targetTotal"
           value={formData.targetTotal}
@@ -137,7 +127,12 @@ function GoalForm({
           <option value="🏃‍♂️">🏃‍♂️ </option>
           <option value="📚">📚 </option>
         </select>
-        <button className="bg-lime-950 rounded-md">Create your goal</button>
+        <div className="flex flex-row justify-center mt-4 gap-4">
+          <button className="bg-lime-950 rounded-md">Create your goal</button>
+          <button onClick={handleCloseForm} type="button" className="bg-lime-950 rounded-md">
+            Cancel
+          </button>
+        </div>
       </div>
     </form>
   );
