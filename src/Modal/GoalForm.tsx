@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { GoalsContext } from '../List/GoalProvider';
 
@@ -23,8 +23,16 @@ const INITIAL_FORM: GoalFormData = {
 
 function GoalForm({ onClose }: { onClose: () => void }) {
   const { handleAddGoal } = useContext(GoalsContext);
+  const { goalToEdit } = useContext(GoalsContext);
 
   const [formData, setFormData] = useState<GoalFormData>(INITIAL_FORM);
+  useEffect(() => {
+    if (goalToEdit) {
+      setFormData(goalToEdit);
+    } else {
+      setFormData(INITIAL_FORM);
+    }
+  }, [goalToEdit]);
 
   const handleCloseForm = () => {
     onClose();
@@ -51,7 +59,7 @@ function GoalForm({ onClose }: { onClose: () => void }) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-4 p-[48px] bg-lime-900 p-4 rounded-md"
     >
-      <h1>Add a new goal</h1>
+      <h1>{goalToEdit ? 'Edit this goal' : 'Create a new goal'}</h1>
       <div className="flex flex-col gap-1">
         <label htmlFor="description">Description of your goal:</label>
         <input

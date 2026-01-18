@@ -1,4 +1,7 @@
-function Navigation({ toggleModal }: { toggleModal?: () => void }) {
+import { useContext } from 'react';
+import { GoalsContext } from '../List/GoalProvider';
+
+function Navigation({ toggleModal }: { toggleModal: () => void }) {
   return (
     <div className="w-1/3 border border-gray-400 rounded">
       <button

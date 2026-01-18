@@ -5,11 +5,19 @@ import { GoalFormData } from '../Modal/GoalForm';
 interface GoalsContextType {
   goals: Mock[];
   handleAddGoal: (goal: GoalFormData) => void;
+  handleEditGoal: (goal: Mock) => void;
+  goalToEdit: Mock | null;
 }
 
 export const GoalsContext = createContext<GoalsContextType>({} as GoalsContextType);
 
-export const GoalsProvider = ({ children }: { children: ReactNode }) => {
+export const GoalsProvider = ({
+  children,
+  toggleModal,
+}: {
+  children: ReactNode;
+  toggleModal?: () => void;
+}) => {
   //Saving goals to localStorage
   const [goals, setGoals] = useState<Mock[]>(() => {
     const savedGoals = localStorage.getItem('goals');
@@ -33,14 +41,34 @@ export const GoalsProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('goals', JSON.stringify(goals));
   }, [goals]);
 
+  //Add and Edit goals
   const handleAddGoal = (newGoalData: GoalFormData) => {
-    const newGoal: Mock = {
-      id: Date.now().toString(),
-      ...newGoalData,
-    };
-    setGoals((prevGoals) => [...prevGoals, newGoal]);
-    console.log('New Goal Added:', newGoal);
+    if (goalToEdit) {
+      setGoals(
+        goals.map((goal) => (goal.id === goalToEdit.id ? { ...goal, ...newGoalData } : goal))
+      );
+    } else {
+      const newGoal: Mock = {
+        id: Date.now().toString(),
+        ...newGoalData,
+      };
+      setGoals((prevGoals) => [...prevGoals, newGoal]);
+      console.log('New Goal Added:', newGoal);
+    }
   };
 
-  return <GoalsContext.Provider value={{ goals, handleAddGoal }}>{children}</GoalsContext.Provider>;
+  //Edit mode
+  const [goalToEdit, setGoalToEdit] = useState<Mock | null>(null);
+  const handleEditGoal = (goal: Mock) => {
+    setGoalToEdit(goal);
+    if (toggleModal) {
+      toggleModal();
+    }
+  };
+
+  return (
+    <GoalsContext.Provider value={{ goals, handleAddGoal, handleEditGoal, goalToEdit }}>
+      {children}
+    </GoalsContext.Provider>
+  );
 };

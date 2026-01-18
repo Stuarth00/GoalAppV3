@@ -25,14 +25,14 @@ function App() {
       <Header />
 
       <main className="flex flex-row p-4 gap-4">
-        <GoalsProvider>
+        <GoalsProvider toggleModal={toggleModal}>
           <Navigation toggleModal={toggleModal} />
 
           <Modal isOpen={isOpen} onClose={closeModal}>
             <GoalForm onClose={closeModal} />
           </Modal>
 
-          <GoalsConsumer toggleModal={toggleModal} />
+          <GoalsConsumer />
         </GoalsProvider>
       </main>
       <Footer />
