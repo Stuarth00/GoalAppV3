@@ -12,11 +12,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+p{
+  color: rgba(215, 223, 217, 0.87);
+}
 
 button {
   padding: 0.6em 0.6em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
 }

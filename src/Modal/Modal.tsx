@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import './Modal.css';
+import { GoalsContext } from '../List/GoalProvider';
 
 const Modal = ({
   isOpen,
@@ -11,6 +12,7 @@ const Modal = ({
   children: React.ReactNode;
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { clearEdit } = useContext(GoalsContext);
 
   useEffect(() => {
     if (!dialogRef.current) return;
@@ -29,6 +31,7 @@ const Modal = ({
   const handleClose = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === dialogRef.current) {
       onClose();
+      clearEdit();
     }
   };
   return (

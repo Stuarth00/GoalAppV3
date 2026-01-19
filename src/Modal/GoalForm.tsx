@@ -22,8 +22,8 @@ const INITIAL_FORM: GoalFormData = {
 };
 
 function GoalForm({ onClose }: { onClose: () => void }) {
-  const { handleAddGoal } = useContext(GoalsContext);
-  const { goalToEdit } = useContext(GoalsContext);
+  //Function from Context
+  const { handleAddGoal, goalToEdit, clearEdit, handleDeleteGoal } = useContext(GoalsContext);
 
   const [formData, setFormData] = useState<GoalFormData>(INITIAL_FORM);
   useEffect(() => {
@@ -35,6 +35,7 @@ function GoalForm({ onClose }: { onClose: () => void }) {
   }, [goalToEdit]);
 
   const handleCloseForm = () => {
+    clearEdit();
     onClose();
     setFormData(INITIAL_FORM);
   };
@@ -133,10 +134,27 @@ function GoalForm({ onClose }: { onClose: () => void }) {
         >
           <option value="">Select your icon</option>
           <option value="🏃‍♂️">🏃‍♂️ </option>
-          <option value="📚">📚 </option>
+          <option value="🧑‍💻">🧑‍💻 </option>
+          <option value="🎯">🎯 </option>
+          <option value="🏋️">🏋️ </option>
+          <option value="💡">💡 </option>
+          <option value="⌚">⌚ </option>
+          <option value="✈️">✈️ </option>
         </select>
         <div className="flex flex-row justify-center mt-4 gap-4">
-          <button className="bg-lime-950 rounded-md">Create your goal</button>
+          <button className="bg-lime-950 rounded-md">
+            {goalToEdit ? 'Save changes' : 'Create goal'}
+          </button>
+
+          {goalToEdit && (
+            <button
+              onClick={() => handleDeleteGoal(goalToEdit.id)}
+              className="bg-lime-950 rounded-md"
+            >
+              Delete this goal
+            </button>
+          )}
+
           <button onClick={handleCloseForm} type="button" className="bg-lime-950 rounded-md">
             Cancel
           </button>

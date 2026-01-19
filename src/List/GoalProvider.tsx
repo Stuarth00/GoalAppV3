@@ -6,6 +6,9 @@ interface GoalsContextType {
   goals: Mock[];
   handleAddGoal: (goal: GoalFormData) => void;
   handleEditGoal: (goal: Mock) => void;
+  clearEdit: () => void;
+  handleDeleteGoal: (goalId: string) => void;
+  handleCompletedGoal: (goalId: string) => void;
   goalToEdit: Mock | null;
 }
 
@@ -37,6 +40,21 @@ export const GoalsProvider = ({
     ];
   });
 
+  //Compleating goal
+  const handleCompletedGoal = (goalId: string) => {
+    setGoals(
+      goals.map((goal) =>
+        goal.id === goalId && goal.targetCompleted < goal.targetTotal
+          ? { ...goal, targetCompleted: goal.targetCompleted + 1 }
+          : goal
+      )
+    );
+  };
+
+  const clearEdit = () => {
+    setGoalToEdit(null);
+  };
+
   useEffect(() => {
     localStorage.setItem('goals', JSON.stringify(goals));
   }, [goals]);
@@ -53,8 +71,8 @@ export const GoalsProvider = ({
         ...newGoalData,
       };
       setGoals((prevGoals) => [...prevGoals, newGoal]);
-      console.log('New Goal Added:', newGoal);
     }
+    setGoalToEdit(null);
   };
 
   //Edit mode
@@ -66,8 +84,24 @@ export const GoalsProvider = ({
     }
   };
 
+  //Deleting goals
+  const handleDeleteGoal = (goalId: string) => {
+    const updatedGoals = goals.filter((goal) => goal.id !== goalId);
+    setGoals(updatedGoals);
+  };
+
   return (
-    <GoalsContext.Provider value={{ goals, handleAddGoal, handleEditGoal, goalToEdit }}>
+    <GoalsContext.Provider
+      value={{
+        goals,
+        handleAddGoal,
+        handleEditGoal,
+        goalToEdit,
+        clearEdit,
+        handleDeleteGoal,
+        handleCompletedGoal,
+      }}
+    >
       {children}
     </GoalsContext.Provider>
   );
